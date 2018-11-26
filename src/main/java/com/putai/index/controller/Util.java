@@ -6,6 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.core.io.Resource;
 
@@ -60,5 +61,11 @@ public class Util {
 				}
 			}
 		}
+	}
+	
+	public static void delete(Resource resource,String title) {
+		List<New> list = read(resource);
+		List<New> collect = list.stream().filter(e->!e.getTitle().equals(title)).collect(Collectors.toList());
+		write(JSON.toJSONString(collect));
 	}
 }
