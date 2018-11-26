@@ -18,7 +18,8 @@ import com.alibaba.fastjson.JSONObject;
 
 
 @RestController
-@CrossOrigin(value= {"http://www.51putai.com","http://172.16.241.166:8080","http://47.99.156.9:8080"})
+//@CrossOrigin(value= {"http://www.51putai.com","http://172.16.241.166:8080","http://47.99.156.9:8080"})
+@CrossOrigin(origins= {"http://192.168.0.114:8079"})
 public class IndexController {
 
 	@Value("file:config/newsData.json")
