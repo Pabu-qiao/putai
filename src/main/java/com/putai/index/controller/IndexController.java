@@ -2,6 +2,7 @@ package com.putai.index.controller;
 
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -18,16 +19,26 @@ import com.alibaba.fastjson.JSONObject;
 
 
 @RestController
-//@CrossOrigin(value= {"http://www.51putai.com","http://172.16.241.166:8080","http://47.99.156.9:8080"})
-@CrossOrigin(origins= {"http://192.168.0.114:8079"})
+//@CrossOrigin(value= {"http://www.51putai.com"})
+@CrossOrigin(origins= {"http://localhost:8080"})
 public class IndexController {
 
 	@Value("file:config/newsData.json")
 	private Resource news;
 	
-	@GetMapping("/news")
-	public List<New> getNews() {
-		return Util.read(news);
+	private final Long pageSize=10L;
+	
+	@GetMapping("/news/{page}")
+	public List<New> getNews(@PathVariable Integer page) {
+		//设置每页10条新闻
+		List<New> collect = Util.read(news).stream().skip(((page>0?page:1)-1)*pageSize).limit(pageSize).collect(Collectors.toList());
+		return collect;
+	}
+	
+	@GetMapping("/total")
+	public Integer	getTotal() {
+		Integer total = (int) Math.ceil(Util.read(news).size()/new Double(pageSize));
+		return total;
 	}
 	
 	@PostMapping("/news")
